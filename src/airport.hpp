@@ -51,6 +51,7 @@ private:
     Terminal& get_terminal(const size_t terminal_num) { return terminals.at(terminal_num); }
 
 public:
+    // airport with type,actual pos, Image, _z for display
     Airport(const AirportType& type_, const Point3D& pos_, const img::Image* image, const float z_ = 1.0f) :
         GL::Displayable { z_ },
         type { type_ },
@@ -60,10 +61,13 @@ public:
         tower { *this }
     {}
 
+    // return the airport
     Tower& get_tower() { return tower; }
 
+    // display the airport
     void display() const override { texture.draw(project_2D(pos), { 2.0f, 2.0f }); }
 
+    //move aircraft at terminals
     void move() override
     {
         for (auto& t : terminals)

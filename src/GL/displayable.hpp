@@ -20,6 +20,8 @@ public:
 
     virtual void display() const = 0;
 
+    virtual bool is_dead() const {return false;};
+
     float get_z() const { return z; }
 };
 

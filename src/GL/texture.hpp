@@ -3,7 +3,7 @@
 #include "../img/image.hpp"
 #include "opengl_interface.hpp"
 
-#include <GL/glut.h>
+#include <GL/freeglut.h>
 #include <array>
 #include <cassert>
 

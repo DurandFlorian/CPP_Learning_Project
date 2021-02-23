@@ -31,9 +31,12 @@ private:
     }
 
 public:
+    // link tower to an airport
     Tower(Airport& airport_) : airport { airport_ } {}
 
     // produce instructions for aircraft
     WaypointQueue get_instructions(Aircraft& aircraft);
+
+    // register aircraft at terminal
     void arrived_at_terminal(const Aircraft& aircraft);
 };

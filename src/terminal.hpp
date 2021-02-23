@@ -17,12 +17,17 @@ private:
     Terminal& operator=(const Terminal&) = delete;
 
 public:
+    //terminal position
     Terminal(const Point3D& pos_) : pos { pos_ } {}
 
+    //if terminal is linked with aircraft
     bool in_use() const { return current_aircraft != nullptr; }
-    bool is_servicing() const { return service_progress < SERVICE_CYCLES; }
-    void assign_craft(const Aircraft& aircraft) { current_aircraft = &aircraft; }
 
+    //if terminal as to ended service
+    bool is_servicing() const { return service_progress < SERVICE_CYCLES; }
+    //assign new aircraft to terminal
+    void assign_craft(const Aircraft& aircraft) { current_aircraft = &aircraft; }
+    //start aircraft service
     void start_service(const Aircraft& aircraft)
     {
         assert(aircraft.distance_to(pos) < DISTANCE_THRESHOLD);
@@ -30,6 +35,7 @@ public:
         service_progress = 0;
     }
 
+    //end service aircraft
     void finish_service()
     {
         if (!is_servicing())
@@ -39,6 +45,7 @@ public:
         }
     }
 
+    //progress service
     void move() override
     {
         if (in_use() && is_servicing())

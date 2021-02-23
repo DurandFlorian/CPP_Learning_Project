@@ -29,7 +29,7 @@ inline AircraftType* aircraft_types[NUM_AIRCRAFT_TYPES] {};
 // our own init here
 inline void init_aircraft_types()
 {
-    aircraft_types[0] = new AircraftType { .02f, .05f, .02f, MediaPath { "l1011_48px.png" } };
-    aircraft_types[1] = new AircraftType { .02f, .05f, .02f, MediaPath { "b707_jat.png" } };
-    aircraft_types[2] = new AircraftType { .02f, .05f, .02f, MediaPath { "concorde_af.png" } };
+    aircraft_types[0] = new AircraftType { .1f, .05f, .1f, MediaPath { "l1011_48px.png" } };
+    aircraft_types[1] = new AircraftType { .1f, .05f, .1f, MediaPath { "b707_jat.png" } };
+    aircraft_types[2] = new AircraftType { .1f, .1f, .1f, MediaPath { "concorde_af.png" } };
 }

@@ -16,7 +16,7 @@ using namespace std::string_literals;
 const std::string airlines[8] = { "AF", "LH", "EY", "DL", "KL", "BA", "AY", "EY" };
 
 TowerSimulation::TowerSimulation(int argc, char** argv) :
-    help { (argc > 1) && (std::string { argv[1] } == "--help"s || std::string { argv[1] } == "-h"s) }
+    help { (argc > 1) && (std::string { argv[1] } == "--help" || std::string { argv[1] } == "-h") }
 {
     MediaPath::initialize(argv[0]);
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
@@ -57,6 +57,8 @@ void TowerSimulation::create_keystrokes() const
     GL::keystrokes.emplace('+', []() { GL::change_zoom(0.95f); });
     GL::keystrokes.emplace('-', []() { GL::change_zoom(1.05f); });
     GL::keystrokes.emplace('f', []() { GL::toggle_fullscreen(); });
+    GL::keystrokes.emplace('m', []() { GL::up_frame_rate(); });
+    GL::keystrokes.emplace('l', []() { GL::down_frame_rate(); });
 }
 
 void TowerSimulation::display_help() const

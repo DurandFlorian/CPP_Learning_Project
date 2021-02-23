@@ -63,10 +63,15 @@ void display(void)
     glOrtho(-zoom, zoom, -zoom, zoom, 0.0f, 1.0f); // left, right, bottom, top, near, far
     glClear(GL_COLOR_BUFFER_BIT);
     glEnable(GL_TEXTURE_2D);
-    for (const auto& item : display_queue)
-    {
-        item->display();
+    for(auto item = display_queue.begin();item!=display_queue.end();){
+        (*item)->display();
+        if((*item)->is_dead()){
+            item = display_queue.erase(item);
+        }else{
+            item++;
+        }
     }
+    
     glDisable(GL_TEXTURE_2D);
     glutSwapBuffers();
 }
@@ -76,9 +81,23 @@ void timer(const int step)
     for (auto& item : move_queue)
     {
         item->move();
+        if(item->is_dead()){
+            auto tmp = item;
+            move_queue.erase(item);
+            delete tmp;
+        }
     }
     glutPostRedisplay();
     glutTimerFunc(1000u / ticks_per_sec, timer, step + 1);
+}
+
+void up_frame_rate(){
+    ticks_per_sec++;
+}
+void down_frame_rate(){
+    if(ticks_per_sec>1){
+        ticks_per_sec--;
+    }
 }
 
 void init_gl(int argc, char** argv, const char* title)
@@ -112,5 +131,7 @@ void exit_loop()
 {
     glutLeaveMainLoop();
 }
+
+
 
 } // namespace GL
