@@ -68,11 +68,11 @@ public:
     void display() const override { texture.draw(project_2D(pos), { 2.0f, 2.0f }); }
 
     //move aircraft at terminals
-    void move() override
+    void move(int64_t dt) override
     {
         for (auto& t : terminals)
         {
-            t.move();
+            t.move(dt);
         }
     }
 

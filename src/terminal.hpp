@@ -46,8 +46,9 @@ public:
     }
 
     //progress service
-    void move() override
+    void move(int64_t dt) override
     {
+        dt +=0;
         if (in_use() && is_servicing())
         {
             ++service_progress;

@@ -63,7 +63,7 @@ void Aircraft::operate_landing_gear()
         if (ground_before && !ground_after)
         {
             std::cout << flight_number << " lift off" << std::endl;
-            dead = true;
+            _dead = true;
         }
         else if (!ground_before && ground_after)
         {
@@ -89,7 +89,7 @@ void Aircraft::add_waypoint(const Waypoint& wp, const bool front)
     }
 }
 
-void Aircraft::move()
+void Aircraft::move(int64_t dt)
 {
     if (waypoints.empty())
     {
@@ -100,7 +100,7 @@ void Aircraft::move()
     {
         turn_to_waypoint();
         // move in the direction of the current speed
-        pos += speed;
+        pos += speed*0.2*(1./GL::ticks_per_sec*dt);
 
         // if we are close to our next waypoint, stike if off the list
         if (!waypoints.empty() && distance_to(waypoints.front()) < DISTANCE_THRESHOLD)
@@ -142,8 +142,4 @@ void Aircraft::move()
 void Aircraft::display() const
 {
     type.texture.draw(project_2D(pos), { PLANE_TEXTURE_DIM, PLANE_TEXTURE_DIM }, get_speed_octant());
-}
-
-bool Aircraft::is_dead() const{
-    return dead;
 }

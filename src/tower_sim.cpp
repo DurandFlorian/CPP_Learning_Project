@@ -38,10 +38,7 @@ void TowerSimulation::create_aircraft(const AircraftType& type) const
     const float angle       = (rand() % 1000) * 2 * 3.141592f / 1000.f; // random angle between 0 and 2pi
     const Point3D start     = Point3D { std::sin(angle), std::cos(angle), 0 } * 3 + Point3D { 0, 0, 2 };
     const Point3D direction = (-start).normalize();
-
-    Aircraft* aircraft = new Aircraft { type, flight_number, start, direction, airport->get_tower() };
-    GL::display_queue.emplace_back(aircraft);
-    GL::move_queue.emplace(aircraft);
+    new Aircraft { type, flight_number, start, direction, airport->get_tower() };
 }
 
 void TowerSimulation::create_random_aircraft() const

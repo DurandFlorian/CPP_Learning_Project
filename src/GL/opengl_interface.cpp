@@ -2,6 +2,8 @@
 
 namespace GL {
 
+auto previous_time = std::chrono::system_clock::now();
+
 void handle_error(const std::string& prefix, const GLenum err)
 {
     if (err != GL_NO_ERROR)
@@ -63,39 +65,42 @@ void display(void)
     glOrtho(-zoom, zoom, -zoom, zoom, 0.0f, 1.0f); // left, right, bottom, top, near, far
     glClear(GL_COLOR_BUFFER_BIT);
     glEnable(GL_TEXTURE_2D);
-    for(auto item = display_queue.begin();item!=display_queue.end();){
-        (*item)->display();
-        if((*item)->is_dead()){
-            item = display_queue.erase(item);
-        }else{
-            item++;
-        }
+    for (const auto& item : display_queue)
+    {
+        item->display();
     }
-    
     glDisable(GL_TEXTURE_2D);
     glutSwapBuffers();
 }
 
 void timer(const int step)
 {
+    auto current_time    = std::chrono::system_clock::now();
+    auto dt              = std::chrono::duration_cast< std::chrono::milliseconds >(current_time - previous_time).count();
+    previous_time          = current_time;
+    GL::DynamicObject* tmp = nullptr;
     for (auto& item : move_queue)
     {
-        item->move();
-        if(item->is_dead()){
-            auto tmp = item;
-            move_queue.erase(item);
-            delete tmp;
+        delete tmp;
+        tmp = nullptr;
+        item->move(dt);
+        if (item->is_dead())
+        {
+            tmp = item;
         }
     }
     glutPostRedisplay();
     glutTimerFunc(1000u / ticks_per_sec, timer, step + 1);
 }
 
-void up_frame_rate(){
+void up_frame_rate()
+{
     ticks_per_sec++;
 }
-void down_frame_rate(){
-    if(ticks_per_sec>1){
+void down_frame_rate()
+{
+    if (ticks_per_sec > 1)
+    {
         ticks_per_sec--;
     }
 }
@@ -131,7 +136,5 @@ void exit_loop()
 {
     glutLeaveMainLoop();
 }
-
-
 
 } // namespace GL

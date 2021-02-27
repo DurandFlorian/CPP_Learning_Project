@@ -19,7 +19,6 @@ private:
     Tower& control;
     bool landing_gear_deployed = false; // is the landing gear deployed?
     bool is_at_terminal        = false;
-    bool dead = false;
 
     // turn the aircraft to arrive at the next waypoint
     // try to facilitate reaching the waypoint after the next by facing the
@@ -58,18 +57,16 @@ public:
         speed.cap_length(max_speed());
     }
 
-    
+    ~Aircraft() {}
 
-    //returns the aircraft number
+    // returns the aircraft number
     const std::string& get_flight_num() const { return flight_number; }
-    //distance from aircraft to a point
+    // distance from aircraft to a point
     float distance_to(const Point3D& p) const { return pos.distance_to(p); }
-    //display the aircraft
+    // display the aircraft
     void display() const override;
-    //move base on instructions
-    void move() override;
-
-    bool is_dead() const;
+    // move base on instructions
+    void move(int64_t dt) override;
 
     friend class Tower;
 };
