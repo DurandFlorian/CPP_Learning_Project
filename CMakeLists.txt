@@ -28,6 +28,9 @@ add_executable(tower
 	src/tower.hpp
 	src/waypoint.hpp
 	src/main.cpp
+	src/aircraft.hpp
+	src/aircraft_factory.hpp
+	src/aircraft_factory.cpp
 )
 
 ###################

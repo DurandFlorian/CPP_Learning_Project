@@ -75,18 +75,21 @@ void display(void)
 
 void timer(const int step)
 {
-    auto current_time    = std::chrono::system_clock::now();
-    auto dt              = std::chrono::duration_cast< std::chrono::milliseconds >(current_time - previous_time).count();
-    previous_time          = current_time;
-    GL::DynamicObject* tmp = nullptr;
-    for (auto& item : move_queue)
+    auto current_time = std::chrono::system_clock::now();
+    auto dt = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - previous_time).count();
+    previous_time = current_time;
+    for (auto it = move_queue.begin(); it != move_queue.end();)
     {
-        delete tmp;
-        tmp = nullptr;
-        item->move(dt);
-        if (item->is_dead())
+        (*it)->move(dt);
+        if ((*it)->is_dead())
         {
-            tmp = item;
+            GL::DynamicObject* tmp = (*it);
+            it++;
+            delete tmp;
+        }
+        else
+        {
+            it++;
         }
     }
     glutPostRedisplay();

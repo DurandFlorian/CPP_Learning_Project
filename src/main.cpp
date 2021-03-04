@@ -3,7 +3,7 @@
 int main(int argc, char** argv)
 {
     TowerSimulation simulation { argc, argv };
-    simulation.launch();
+    simulation.launch(MediaPath { "aircraft_types.txt" });
 
     return 0;
 }

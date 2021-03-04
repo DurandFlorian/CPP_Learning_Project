@@ -36,17 +36,23 @@ Modifiez le programme pour tenir compte de cela.
 
 2) Identifiez quelle variable contrôle le framerate de la simulation.
 Ajoutez deux nouveaux inputs au programme permettant d'augmenter ou de diminuer cette valeur.
-Essayez maintenant de mettre en pause le programme en manipulant ce framerate. Que se passe-t-il ? Fixez le problème.
+Essayez maintenant de mettre en pause le programme en manipulant ce framerate. Que se passe-t-il ?\
+Ajoutez une nouvelle fonctionnalité au programme pour mettre le programme en pause, et qui ne passe pas par le framerate ? 
 
 3) Identifiez quelle variable contrôle le temps de débarquement des avions et doublez-le.
 
-4) Lorsqu'un avion décolle, celui-ci n'est pas retiré du programme.
-Faites en sorte qu'il le soit.
+4) Lorsqu'un avion a décollé, il réattérit peu de temps après.
+Faites en sorte qu'à la place, il soit retiré du programme.\
+Indices :\
+A quel endroit pouvez-vous savoir que l'avion doit être supprimé ?\
+Pourquoi n'est-il pas sûr de procéder au retrait de l'avion dans cette fonction ?
+A quel endroit de la callstack pourriez-vous le faire à la place ?\
+Que devez-vous modifier pour transmettre l'information de la première à la seconde fonction ?
 
 5) Lorsqu'un objet de type `Displayable` est créé, il faut ajouter celui-ci manuellement dans la liste des objets à afficher.
 Il faut également penser à le supprimer de cette liste avant de le détruire.
 Que pourriez-vous faire afin que l'ajout et la suppression de la liste soit "automatiquement gérée" lorsqu'un `Displayable` est créé ou détruit ?
-Faites de même pour `DynamicObject`.
+Pensez-vous qu'il soit pertinent d'en faire de même pour `DynamicObject` ?
 
 6) La tour de contrôle a besoin de stocker pour tout `Aircraft` le `Terminal` qui lui est actuellement attribué, afin de pouvoir le libérer une fois que l'avion décolle.
 Cette information est actuellement enregistrée dans un `std::vector<std::pair<const Aircraft*, size_t>>` (size_t représentant l'indice du terminal).
