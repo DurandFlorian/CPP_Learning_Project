@@ -13,12 +13,13 @@ public:
 
     void move(int64_t dt) override
     {
-        for (auto& aircraft : aircrafts)
-        {
-            aircraft.get()->move(dt);
-            if (aircraft.get()->is_dead())
+        for(auto it = aircrafts.begin();it!=aircrafts.end();){
+            it->get()->move(dt);
+            if (it->get()->is_dead())
             {
-                aircrafts.erase(aircraft);
+                it = aircrafts.erase(it);
+            }else{
+                it++;
             }
         }
     }

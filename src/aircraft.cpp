@@ -100,7 +100,7 @@ void Aircraft::move(int64_t dt)
     {
         turn_to_waypoint();
         // move in the direction of the current speed
-        pos += speed*0.2*(1./GL::ticks_per_sec*dt);
+        pos += speed*(dt/100.);
 
         // if we are close to our next waypoint, stike if off the list
         if (!waypoints.empty() && distance_to(waypoints.front()) < DISTANCE_THRESHOLD)

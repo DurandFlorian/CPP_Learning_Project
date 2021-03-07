@@ -2,6 +2,7 @@
 
 #include "aircraft_manager.hpp"
 #include "aircraft_factory.hpp"
+#include "texture_pool.hpp"
 #include <memory>
 
 class Airport;
@@ -14,6 +15,7 @@ private:
     Airport* airport = nullptr;
     AircraftManager _aircraft_manager;
     std::unique_ptr<AircraftFactory> _aircraft_factory;
+    TexturePool texture_pool;
 
     TowerSimulation(const TowerSimulation&) = delete;
     TowerSimulation& operator=(const TowerSimulation&) = delete;

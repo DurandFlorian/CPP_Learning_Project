@@ -3,8 +3,8 @@
 #include <fstream>
 #include <iostream>
 
-AircraftFactory::AircraftFactory(AircraftManager& aircraft_manager, Airport* airport, const MediaPath& path) :
-    _aircraft_manager { aircraft_manager }, _airport { airport }, aircraft_types { loadTypes(path) }
+AircraftFactory::AircraftFactory(AircraftManager& aircraft_manager, Airport* airport, const MediaPath& path, TexturePool& texture_pool) :
+    _aircraft_manager { aircraft_manager }, _airport { airport }, aircraft_types { loadTypes(path,texture_pool) }
 {}
 
 void AircraftFactory::create_aircraft(const AircraftType& type)
@@ -25,12 +25,13 @@ void AircraftFactory::create_aircraft(const AircraftType& type)
 
 void AircraftFactory::create_random_aircraft()
 {
+    
     create_aircraft(*(aircraft_types[rand() % aircraft_types.size()]));
 }
 
-std::vector<AircraftType*> AircraftFactory::loadTypes(const MediaPath& path)
+std::vector<std::unique_ptr<AircraftType>> AircraftFactory::loadTypes(const MediaPath& path,TexturePool& texture_pool)
 {
-    std::vector<AircraftType*> types;
+    std::vector<std::unique_ptr<AircraftType>> types;
     std::string line;
     std::ifstream file { path.get_full_path() };
     std::string parameters[4];
@@ -46,8 +47,10 @@ std::vector<AircraftType*> AircraftFactory::loadTypes(const MediaPath& path)
                 parameters[i] = line.substr(pos, next_pos - pos);
                 pos           = next_pos + 1;
             }
-            types.emplace_back(new AircraftType { std::stof(parameters[0]), std::stof(parameters[1]),
-                                                  std::stof(parameters[2]), MediaPath { parameters[3] } });
+            types.emplace_back(std::make_unique<AircraftType> ( std::stof(parameters[0]), std::stof(parameters[1]),
+                                                  std::stof(parameters[2]), 
+                                                  texture_pool.get_texture(MediaPath{parameters[3]},NUM_AIRCRAFT_TILES )
+            ));
         }
     }
     return types;

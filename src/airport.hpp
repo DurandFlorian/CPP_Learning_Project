@@ -17,7 +17,7 @@ class Airport : public GL::Displayable, public GL::DynamicObject
 private:
     const AirportType& type;
     const Point3D pos;
-    const GL::Texture2D texture;
+    const GL::Texture2D& texture;
     std::vector<Terminal> terminals;
     Tower tower;
 
@@ -52,7 +52,7 @@ private:
 
 public:
     // airport with type,actual pos, Image, _z for display
-    Airport(const AirportType& type_, const Point3D& pos_, const img::Image* image, const float z_ = 1.0f) :
+    Airport(const AirportType& type_, const Point3D& pos_, const GL::Texture2D& image, const float z_ = 1.0f) :
         GL::Displayable { z_ },
         type { type_ },
         pos { pos_ },

@@ -16,6 +16,7 @@ public:
 
     MediaPath(const std::string_view path_) : path { path_ } {}
 
+
     std::filesystem::path get_full_path() const
     {
         if (media_path.empty())
@@ -25,6 +26,11 @@ public:
         }
 
         return media_path / path;
+    }
+
+    friend bool operator<(const MediaPath& m1,const MediaPath& m2)
+    {
+        return m1.path < m2.path;
     }
 
 private:
