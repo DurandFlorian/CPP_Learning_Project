@@ -14,8 +14,7 @@ class Terminal;
 class Tower
 {
 private:
-    using AircraftToTerminal      = std::unordered_map<const Aircraft*,size_t>;
-    using AircraftAndTerminalIter = AircraftToTerminal::iterator;
+    using AircraftToTerminal = std::unordered_map<const Aircraft*,size_t>;
 
     Airport& airport;
     // aircrafts may reserve a terminal

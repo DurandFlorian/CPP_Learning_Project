@@ -59,13 +59,13 @@ void reshape_window(int w, int h)
 void display(void)
 {
     // sort the displayables by their z-coordinate
-    std::sort(display_queue.begin(), display_queue.end(), disp_z_cmp {});
+    std::sort(Displayable::display_queue.begin(), Displayable::display_queue.end(), disp_z_cmp {});
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrtho(-zoom, zoom, -zoom, zoom, 0.0f, 1.0f); // left, right, bottom, top, near, far
     glClear(GL_COLOR_BUFFER_BIT);
     glEnable(GL_TEXTURE_2D);
-    for (const auto& item : display_queue)
+    for (const auto& item : Displayable::display_queue)
     {
         item->display();
     }
@@ -75,24 +75,27 @@ void display(void)
 
 void timer(const int step)
 {
-    auto current_time = std::chrono::system_clock::now();
-    auto dt = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - previous_time).count();
-    previous_time = current_time;
-    for (auto it = move_queue.begin(); it != move_queue.end();)
+    if (!paused)
     {
-        (*it)->move(dt);
-        if ((*it)->is_dead())
+        auto current_time = std::chrono::system_clock::now();
+        auto dt = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - previous_time).count();
+        previous_time = current_time;
+        for (auto it = move_queue.begin(); it != move_queue.end();)
         {
-            GL::DynamicObject* tmp = (*it);
-            it++;
-            delete tmp;
+            GL::DynamicObject* dynamic_obj = *it;
+            dynamic_obj->move(dt);
+            if (dynamic_obj->is_dead())
+            {
+                it = move_queue.erase(it);
+                delete dynamic_obj;
+            }
+            else
+            {
+                it++;
+            }
         }
-        else
-        {
-            it++;
-        }
+        glutPostRedisplay();
     }
-    glutPostRedisplay();
     glutTimerFunc(1000u / ticks_per_sec, timer, step + 1);
 }
 
@@ -106,6 +109,11 @@ void down_frame_rate()
     {
         ticks_per_sec--;
     }
+}
+
+void pause()
+{
+    paused = !paused;
 }
 
 void init_gl(int argc, char** argv, const char* title)

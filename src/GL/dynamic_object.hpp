@@ -4,19 +4,15 @@
 
 namespace GL {
 
-class DynamicObject;
-
-inline std::unordered_set<DynamicObject*> move_queue;
-
 class DynamicObject
 {
 protected :
     bool _dead = false;
 
 public:
-    DynamicObject() { move_queue.emplace(this); }
+    DynamicObject() { }
 
-    virtual ~DynamicObject() { move_queue.erase(this); }
+    virtual ~DynamicObject() { }
 
     virtual void move(int64_t dt) = 0;
 
@@ -26,6 +22,6 @@ public:
     }
 };
 
-
+inline std::unordered_set<DynamicObject*> move_queue;
 
 } // namespace GL

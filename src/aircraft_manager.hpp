@@ -9,7 +9,10 @@
 class AircraftManager : public GL::DynamicObject
 {
 public:
-    void add_aircraft(std::unique_ptr<Aircraft> aircraft) { aircrafts.emplace(std::move(aircraft)); }
+
+    void add_aircraft(std::unique_ptr<Aircraft> aircraft) { 
+        aircrafts.emplace(std::move(aircraft)); 
+    }
 
     void move(int64_t dt) override
     {
