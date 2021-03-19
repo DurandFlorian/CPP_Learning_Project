@@ -3,9 +3,9 @@
 #include "waypoint.hpp"
 
 #include <algorithm>
+#include <map>
 #include <unordered_map>
 #include <utility>
-#include <map>
 
 class Airport;
 class Aircraft;
@@ -14,7 +14,7 @@ class Terminal;
 class Tower
 {
 private:
-    using AircraftToTerminal = std::unordered_map<const Aircraft*,size_t>;
+    using AircraftToTerminal = std::unordered_map<const Aircraft*, size_t>;
 
     Airport& airport;
     // aircrafts may reserve a terminal
@@ -32,4 +32,8 @@ public:
 
     // register aircraft at terminal
     void arrived_at_terminal(const Aircraft& aircraft);
+
+    WaypointQueue reserve_terminal(Aircraft& aircraft);
+
+    void unbook_terminal(Aircraft& aircraft);
 };

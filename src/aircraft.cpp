@@ -93,14 +93,18 @@ void Aircraft::move(int64_t dt)
 {
     if (waypoints.empty())
     {
-        waypoints = control.get_instructions(*this);
+        waypoints = control.reserve_terminal(*this);
     }
 
+    if (waypoints.empty())
+    {
+        waypoints = control.get_instructions(*this);
+    }
     if (!is_at_terminal)
     {
         turn_to_waypoint();
         // move in the direction of the current speed
-        pos += speed*(dt/100.);
+        pos += speed * (dt / 100.);
 
         // if we are close to our next waypoint, stike if off the list
         if (!waypoints.empty() && distance_to(waypoints.front()) < DISTANCE_THRESHOLD)
@@ -126,6 +130,14 @@ void Aircraft::move(int64_t dt)
         }
         else
         {
+            fuel -= 10;
+            if (fuel <= 0)
+            {
+                std::cout << flight_number + " crashed into the ground no fuel left" << std::endl;
+                _dead = true;
+                control.unbook_terminal(*this);
+                return;
+            }
             // if we are in the air, but too slow, then we will sink!
             const float speed_len = speed.length();
             if (speed_len < SPEED_THRESHOLD)
@@ -144,6 +156,62 @@ void Aircraft::display() const
     type.texture.draw(project_2D(pos), { PLANE_TEXTURE_DIM, PLANE_TEXTURE_DIM }, get_speed_octant());
 }
 
-bool Aircraft::is_dead() const{
+bool Aircraft::is_dead() const
+{
     return _dead;
+}
+
+bool Aircraft::is_circling() const
+{
+    if (waypoints.empty())
+    {
+        return true;
+    }
+    return waypoints.back().type == wp_air;
+}
+
+bool Aircraft::has_terminal() const
+{
+    if (waypoints.empty())
+    {
+        return is_at_terminal;
+    }
+    return waypoints.back().type == wp_terminal;
+}
+
+bool Aircraft::is_low_on_fuel() const
+{
+    return fuel < 200;
+}
+
+int Aircraft::get_required_fuel() const
+{
+    if (is_low_on_fuel() && landing_gear_deployed)
+    {
+        return 3000 - fuel;
+    }
+    return 0;
+}
+
+void Aircraft::refill(int& fuel_stock)
+{
+    auto required_fuel = get_required_fuel();
+    if (required_fuel == 0 || fuel_stock == 0)
+    {
+        return;
+    }
+    fuel_stock -= required_fuel;
+    if (fuel_stock < 0)
+    {
+        fuel += required_fuel + fuel_stock;
+        std::cout << flight_number << " has been refilled with " << required_fuel + fuel_stock
+                  << " of fuel stock" << std::endl;
+        fuel_stock = 0;
+    }
+    else
+    {
+        fuel += required_fuel;
+        std::cout << flight_number << " has been refilled with " << required_fuel << " of fuel stock"
+                  << std::endl;
+    }
 }

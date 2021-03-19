@@ -3,6 +3,7 @@
 #include "GL/displayable.hpp"
 #include "GL/dynamic_object.hpp"
 #include "GL/texture.hpp"
+#include "aircraft_manager.hpp"
 #include "airport_type.hpp"
 #include "geometry.hpp"
 #include "img/image.hpp"
@@ -20,6 +21,10 @@ private:
     const GL::Texture2D& texture;
     std::vector<Terminal> terminals;
     Tower tower;
+    int fuel_stock       = 0;
+    int ordered_fuel     = 0;
+    int next_refill_time = 0;
+    AircraftManager& aircraftManager;
 
     // reserve a terminal
     // if a terminal is free, return
@@ -52,13 +57,15 @@ private:
 
 public:
     // airport with type,actual pos, Image, _z for display
-    Airport(const AirportType& type_, const Point3D& pos_, const GL::Texture2D& image, const float z_ = 1.0f) :
+    Airport(const AirportType& type_, const Point3D& pos_, const GL::Texture2D& image,
+            AircraftManager& aircraft_manager, const float z_ = 1.0f) :
         GL::Displayable { z_ },
         type { type_ },
         pos { pos_ },
         texture { image },
         terminals { type.create_terminals() },
-        tower { *this }
+        tower { *this },
+        aircraftManager { aircraft_manager }
     {}
 
     // return the airport
@@ -67,11 +74,25 @@ public:
     // display the airport
     void display() const override { texture.draw(project_2D(pos), { 2.0f, 2.0f }); }
 
-    //move aircraft at terminals
+    // move aircraft at terminals
     void move(int64_t dt) override
     {
+        if (next_refill_time == 0)
+        {
+            fuel_stock += ordered_fuel;
+            auto full_received = ordered_fuel;
+            ordered_fuel       = std::min(aircraftManager.get_required_fuel(), 5000);
+            next_refill_time   = 100;
+            std::cout << "Airport refill -> fuel received : " << full_received
+                      << " | fuel stock : " << fuel_stock << " | fuel ordered : " << ordered_fuel;
+        }
+        else
+        {
+            next_refill_time--;
+        }
         for (auto& t : terminals)
         {
+            t.refill_aircraft_if_needed(fuel_stock);
             t.move(dt);
         }
     }

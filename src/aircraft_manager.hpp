@@ -1,32 +1,22 @@
 #pragma once
 
-#include "aircraft.hpp"
 #include "GL/dynamic_object.hpp"
+#include "aircraft.hpp"
 
 #include <memory>
-#include <unordered_set>
+#include <vector>
 
 class AircraftManager : public GL::DynamicObject
 {
 public:
+    void add_aircraft(std::unique_ptr<Aircraft> aircraft);
 
-    void add_aircraft(std::unique_ptr<Aircraft> aircraft) { 
-        aircrafts.emplace(std::move(aircraft)); 
-    }
+    void move(int64_t dt) override;
 
-    void move(int64_t dt) override
-    {
-        for(auto it = aircrafts.begin();it!=aircrafts.end();){
-            it->get()->move(dt);
-            if (it->get()->is_dead())
-            {
-                it = aircrafts.erase(it);
-            }else{
-                it++;
-            }
-        }
-    }
+    int aircrafts_on_airline(const std::string& line);
+
+    int get_required_fuel() const;
 
 private:
-    std::unordered_set<std::unique_ptr<Aircraft>> aircrafts;
+    std::vector<std::unique_ptr<Aircraft>> aircrafts;
 };

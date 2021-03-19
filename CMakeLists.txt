@@ -33,6 +33,8 @@ add_executable(tower
 	src/aircraft_factory.cpp
 	src/texture_pool.hpp
 	src/texture_pool.cpp
+	src/aircraft_manager.hpp
+	src/aircraft_manager.cpp
 )
 
 ###################

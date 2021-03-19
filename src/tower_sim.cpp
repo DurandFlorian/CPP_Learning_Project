@@ -40,6 +40,11 @@ void TowerSimulation::create_keystrokes()
     GL::keystrokes.emplace('m', []() { GL::up_frame_rate(); });
     GL::keystrokes.emplace('l', []() { GL::down_frame_rate(); });
     GL::keystrokes.emplace('p', []() { GL::pause(); });
+    for (int x = 0; x < 8; x++)
+    {
+        GL::keystrokes.emplace('0' + x,
+                               [this, x]() { _aircraft_factory.get()->print_aircrafts_on_airline(x); });
+    }
 }
 
 void TowerSimulation::display_help() const
@@ -47,9 +52,9 @@ void TowerSimulation::display_help() const
     std::cout << "This is an airport tower simulator" << std::endl
               << "the following keysstrokes have meaning:" << std::endl;
 
-    for (const auto& ks_pair : GL::keystrokes)
+    for (const auto& [key, value] : GL::keystrokes)
     {
-        std::cout << ks_pair.first << ' ';
+        std::cout << key << ' ';
     }
 
     std::cout << std::endl;
@@ -58,7 +63,7 @@ void TowerSimulation::display_help() const
 void TowerSimulation::init_airport()
 {
     airport = new Airport { one_lane_airport, Point3D { 0, 0, 0 },
-                            texture_pool.get_texture(one_lane_airport_sprite_path, 1) };
+                            texture_pool.get_texture(one_lane_airport_sprite_path, 1), _aircraft_manager };
 
     GL::Displayable::display_queue.emplace_back(airport);
     GL::move_queue.emplace(airport);
