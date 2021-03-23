@@ -87,7 +87,7 @@ public:
         {
             fuel_stock += ordered_fuel;
             auto full_received = ordered_fuel;
-            ordered_fuel       = std::min(aircraftManager.get_required_fuel(), 5000);
+            ordered_fuel       = std::min(aircraftManager.get_required_fuel(), 5000); //TODO : modifier
             next_refill_time   = 100;
             std::cout << "Airport refill -> fuel received : " << full_received
                       << " | fuel stock : " << fuel_stock << " | fuel ordered : " << ordered_fuel
@@ -97,7 +97,6 @@ public:
         {
             next_refill_time--;
         }
-        
     }
 
     friend class Tower;

@@ -133,8 +133,7 @@ void Aircraft::move(int64_t dt)
         }
         else
         {
-            fuel -= 1;
-            std::cout << fuel << std::endl;
+            fuel -= 5;
             if (fuel <= 0)
             {
                 control.unbook_terminal(*this);
