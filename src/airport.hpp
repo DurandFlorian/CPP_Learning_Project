@@ -78,6 +78,11 @@ public:
     void move(int64_t dt) override
     {
         assert(dt > -1);
+        for (auto& t : terminals)
+        {
+            t.refill_aircraft_if_needed(fuel_stock);
+            t.move(dt);
+        }
         if (next_refill_time == 0)
         {
             fuel_stock += ordered_fuel;
@@ -92,11 +97,7 @@ public:
         {
             next_refill_time--;
         }
-        for (auto& t : terminals)
-        {
-            t.refill_aircraft_if_needed(fuel_stock);
-            t.move(dt);
-        }
+        
     }
 
     friend class Tower;

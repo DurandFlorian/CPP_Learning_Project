@@ -133,7 +133,8 @@ void Aircraft::move(int64_t dt)
         }
         else
         {
-            fuel -= 10;
+            fuel -= 1;
+            std::cout << fuel << std::endl;
             if (fuel <= 0)
             {
                 control.unbook_terminal(*this);
@@ -199,7 +200,7 @@ void Aircraft::refill(int& fuel_stock)
 {
     assert(fuel_stock > -1);
     auto required_fuel = get_required_fuel();
-    if (required_fuel == 0 || fuel_stock == 0)
+    if (!is_at_terminal || required_fuel == 0 || fuel_stock == 0)
     {
         return;
     }
