@@ -77,6 +77,7 @@ public:
     // move aircraft at terminals
     void move(int64_t dt) override
     {
+        assert(dt > -1);
         if (next_refill_time == 0)
         {
             fuel_stock += ordered_fuel;
@@ -84,7 +85,8 @@ public:
             ordered_fuel       = std::min(aircraftManager.get_required_fuel(), 5000);
             next_refill_time   = 100;
             std::cout << "Airport refill -> fuel received : " << full_received
-                      << " | fuel stock : " << fuel_stock << " | fuel ordered : " << ordered_fuel;
+                      << " | fuel stock : " << fuel_stock << " | fuel ordered : " << ordered_fuel
+                      << std::endl;
         }
         else
         {

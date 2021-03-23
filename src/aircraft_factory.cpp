@@ -28,7 +28,7 @@ void AircraftFactory::create_aircraft(const AircraftType& type)
 
 void AircraftFactory::create_random_aircraft()
 {
-
+    assert(_airport);
     create_aircraft(*(aircraft_types[rand() % aircraft_types.size()]));
 }
 
@@ -61,5 +61,6 @@ std::vector<std::unique_ptr<AircraftType>> AircraftFactory::loadTypes(const Medi
 
 void AircraftFactory::print_aircrafts_on_airline(int x)
 {
+    assert(x < airlines_size);
     std::cout << airlines[x] << " : " << _aircraft_manager.aircrafts_on_airline(airlines[x]) << std::endl;
 }

@@ -35,6 +35,7 @@ add_executable(tower
 	src/texture_pool.cpp
 	src/aircraft_manager.hpp
 	src/aircraft_manager.cpp
+	src/aircraft_crash.hpp
 )
 
 ###################

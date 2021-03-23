@@ -1,6 +1,7 @@
 #include "aircraft.hpp"
 
 #include "GL/opengl_interface.hpp"
+#include "aircraft_crash.hpp"
 
 #include <cmath>
 
@@ -91,6 +92,7 @@ void Aircraft::add_waypoint(const Waypoint& wp, const bool front)
 
 void Aircraft::move(int64_t dt)
 {
+    assert(dt > -1);
     if (waypoints.empty())
     {
         waypoints = control.reserve_terminal(*this);
@@ -125,7 +127,8 @@ void Aircraft::move(int64_t dt)
             if (!landing_gear_deployed)
             {
                 using namespace std::string_literals;
-                throw AircraftCrash { flight_number + " crashed into the ground" };
+                _dead = true;
+                throw AircraftCrash { flight_number, pos, speed, "bad landing" };
             }
         }
         else
@@ -133,10 +136,9 @@ void Aircraft::move(int64_t dt)
             fuel -= 10;
             if (fuel <= 0)
             {
-                std::cout << flight_number + " crashed into the ground no fuel left" << std::endl;
-                _dead = true;
                 control.unbook_terminal(*this);
-                return;
+                _dead = true;
+                throw AircraftCrash { flight_number, pos, speed, "out of fuel" };
             }
             // if we are in the air, but too slow, then we will sink!
             const float speed_len = speed.length();
@@ -195,6 +197,7 @@ int Aircraft::get_required_fuel() const
 
 void Aircraft::refill(int& fuel_stock)
 {
+    assert(fuel_stock > -1);
     auto required_fuel = get_required_fuel();
     if (required_fuel == 0 || fuel_stock == 0)
     {

@@ -17,6 +17,9 @@ public:
 
     int get_required_fuel() const;
 
+    void print_crashed_aircrafts() const;
+
 private:
     std::vector<std::unique_ptr<Aircraft>> aircrafts;
+    int crashed_aircrafts = 0;
 };

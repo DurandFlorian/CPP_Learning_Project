@@ -12,7 +12,8 @@
 class AircraftFactory
 {
 private:
-    const std::string airlines[8] = { "AF", "LH", "EY", "DL", "KL", "BA", "AY", "EY" };
+    static const int airlines_size                   = 8;
+    const std::string airlines[airlines_size] = { "AF", "LH", "EY", "DL", "KL", "BA", "AY", "EY" };
     AircraftManager& _aircraft_manager;
     Airport* _airport;
     std::vector<std::unique_ptr<AircraftType>> aircraft_types;

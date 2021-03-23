@@ -9,8 +9,8 @@
 class Terminal : public GL::DynamicObject
 {
 private:
-    unsigned int service_progress    = SERVICE_CYCLES;
-    Aircraft* current_aircraft = nullptr;
+    unsigned int service_progress = SERVICE_CYCLES;
+    Aircraft* current_aircraft    = nullptr;
     const Point3D pos;
 
     Terminal(const Terminal&) = delete;
@@ -48,7 +48,7 @@ public:
     // progress service
     void move(int64_t dt) override
     {
-        dt = dt;
+        assert(dt > -1);
         if (in_use() && is_servicing() && !current_aircraft->is_low_on_fuel())
         {
             ++service_progress;
@@ -59,6 +59,7 @@ public:
     {
         if (in_use() && current_aircraft->is_low_on_fuel())
         {
+            assert(current_aircraft);
             current_aircraft->refill(fuel_stock);
         }
     }

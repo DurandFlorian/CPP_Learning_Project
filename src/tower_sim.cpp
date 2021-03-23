@@ -33,12 +33,18 @@ void TowerSimulation::create_keystrokes()
 {
     GL::keystrokes.emplace('x', []() { GL::exit_loop(); });
     GL::keystrokes.emplace('q', []() { GL::exit_loop(); });
-    GL::keystrokes.emplace('c', [this]() { _aircraft_factory.get()->create_random_aircraft(); });
+    GL::keystrokes.emplace('c',
+                           [this]()
+                           {
+                               assert(_aircraft_factory);
+                               _aircraft_factory.get()->create_random_aircraft();
+                           });
     GL::keystrokes.emplace('+', []() { GL::change_zoom(0.95f); });
     GL::keystrokes.emplace('-', []() { GL::change_zoom(1.05f); });
     GL::keystrokes.emplace('f', []() { GL::toggle_fullscreen(); });
     GL::keystrokes.emplace('m', []() { GL::up_frame_rate(); });
     GL::keystrokes.emplace('l', []() { GL::down_frame_rate(); });
+    GL::keystrokes.emplace('a', [this]() { _aircraft_manager.print_crashed_aircrafts(); });
     GL::keystrokes.emplace('p', []() { GL::pause(); });
     for (int x = 0; x < 8; x++)
     {
@@ -79,6 +85,7 @@ void TowerSimulation::launch(const MediaPath& path)
     }
 
     init_airport();
+    assert(airport);
     _aircraft_factory = std::make_unique<AircraftFactory>(_aircraft_manager, airport, path, texture_pool);
 
     GL::loop();
