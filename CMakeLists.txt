@@ -36,6 +36,7 @@ add_executable(tower
 	src/aircraft_manager.hpp
 	src/aircraft_manager.cpp
 	src/aircraft_crash.hpp
+	src/point.hpp
 )
 
 ###################
@@ -47,7 +48,7 @@ target_compile_features(tower PRIVATE cxx_std_17)
 if(MSVC)
   target_compile_options(tower PRIVATE /W4 /WX)
 else()
-  target_compile_options(tower PRIVATE -Wall -Wextra -Werror -Wshadow)
+  target_compile_options(tower PRIVATE -Wall -Wextra  -Wshadow)
 endif()
 
 
