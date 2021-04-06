@@ -2,12 +2,12 @@
 
 #include <algorithm>
 #include <array>
+#include <cassert>
 #include <math.h>
 #include <numeric>
 #include <string>
-#include <cassert>
 
-template <unsigned char dimension, typename T> class Point
+template <unsigned char dimension, typename T, std::enable_if_t<std::is_arithmetic_v<T>,bool > = true> class Point
 {
 public:
     float& x()
@@ -45,15 +45,10 @@ public:
 
     Point() {};
 
-    // template <typename... Arg> Point(Arg&&... init) : values { std::forward<Arg>(init)... } {}
-
-    Point(std::initializer_list<T> init)
+    template <typename... Arg>
+    Point(T v, Arg&&... init) : values { v,static_cast<T>(std::forward<Arg>(init))... }
     {
-        assert(init.size() == dimension); // static_assert si j'avais pas utilisé une initializer_list
-        for (int i = 0; i < dimension; i++)
-        {
-            values[i] = *(init.begin() + i);
-        }
+        static_assert(sizeof...(init) <= dimension);
     }
 
     Point& operator+=(const Point& other)

@@ -38,22 +38,22 @@ std::vector<std::unique_ptr<AircraftType>> AircraftFactory::loadTypes(const Medi
     std::vector<std::unique_ptr<AircraftType>> types;
     std::string line;
     std::ifstream file { path.get_full_path() };
-    std::string parameters[4];
+    std::string parameters[6];
     if (file.is_open())
     {
         while (getline(file, line))
         {
             uint8_t pos      = 0;
             uint8_t next_pos = 0;
-            for (uint8_t i = 0; i < 4; i++)
+            for (uint8_t i = 0; i < 6; i++)
             {
                 next_pos      = line.find(" ", pos);
                 parameters[i] = line.substr(pos, next_pos - pos);
                 pos           = next_pos + 1;
             }
             types.emplace_back(std::make_unique<AircraftType>(
-                std::stof(parameters[0]), std::stof(parameters[1]), std::stof(parameters[2]),
-                texture_pool.get_texture(MediaPath { parameters[3] }, NUM_AIRCRAFT_TILES)));
+                std::stof(parameters[0]), std::stof(parameters[1]), std::stof(parameters[2]),std::stoi(parameters[3]),std::stoi(parameters[4]),
+                texture_pool.get_texture(MediaPath { parameters[5] }, NUM_AIRCRAFT_TILES)));
         }
     }
     return types;

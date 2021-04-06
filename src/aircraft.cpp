@@ -135,7 +135,7 @@ void Aircraft::move(int64_t dt)
         }
         else
         {
-            fuel -= 5;
+            fuel -= type.consumed_fuel;
             if (fuel <= 0)
             {
                 control.unbook_terminal(*this);
