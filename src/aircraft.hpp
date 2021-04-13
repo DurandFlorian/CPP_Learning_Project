@@ -21,7 +21,7 @@ private:
     Tower& control;
     bool landing_gear_deployed = false; // is the landing gear deployed?
     bool is_at_terminal        = false;
-    bool dead                 = false;
+    bool dead                  = false;
     int fuel                   = std::experimental::randint(150, type.max_fuel);
 
     // turn the aircraft to arrive at the next waypoint
@@ -40,8 +40,7 @@ private:
     void arrive_at_terminal();
     // deploy and retract landing gear depending on next waypoints
     void operate_landing_gear();
-    template<bool front>
-    void add_waypoint(const Waypoint& wp);
+    template <bool front> void add_waypoint(const Waypoint& wp);
     bool is_on_ground() const { return pos.z() < DISTANCE_THRESHOLD; }
     void crash(const std::string_view&);
     float max_speed() const { return is_on_ground() ? type.max_ground_speed : type.max_air_speed; }
@@ -65,13 +64,12 @@ public:
 
     ~Aircraft() {}
 
-    
     const std::string& get_flight_num() const { return flight_number; }
-    
+
     float distance_to(const Point3D& p) const { return pos.distance_to(p); }
-   
+
     void display() const override;
-    
+
     void move(int64_t dt);
 
     bool is_dead() const;

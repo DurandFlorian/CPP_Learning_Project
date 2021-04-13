@@ -3,13 +3,12 @@
 #include <fstream>
 #include <iostream>
 
-AircraftFactory::AircraftFactory(AircraftManager& aircraft_manager_,Airport& airport_, const MediaPath& path,
-                                  TexturePool& texture_pool) :
+AircraftFactory::AircraftFactory(AircraftManager& aircraft_manager_, Airport& airport_, const MediaPath& path,
+                                 TexturePool& texture_pool) :
     aircraft_manager { aircraft_manager_ },
     airport { airport_ },
     aircraft_types { load_types(path, texture_pool) }
 {}
-
 void AircraftFactory::create_aircraft(const AircraftType& type)
 {
     std::string flight_number = airlines[std::rand() % 8] + std::to_string(1000 + (rand() % 9000));
@@ -31,12 +30,12 @@ void AircraftFactory::create_random_aircraft()
 }
 
 std::vector<std::unique_ptr<const AircraftType>> AircraftFactory::load_types(const MediaPath& path,
-                                                                      TexturePool& texture_pool)
+                                                                             TexturePool& texture_pool)
 {
     std::vector<std::unique_ptr<const AircraftType>> types;
     std::string line;
     std::ifstream file { path.get_full_path() };
-    std::array<std::string,6> parameters;
+    std::array<std::string, 6> parameters;
     if (file.is_open())
     {
         while (getline(file, line))
@@ -50,7 +49,8 @@ std::vector<std::unique_ptr<const AircraftType>> AircraftFactory::load_types(con
                 pos           = next_pos + 1;
             }
             types.emplace_back(std::make_unique<AircraftType>(
-                std::stof(parameters[0]), std::stof(parameters[1]), std::stof(parameters[2]),std::stoi(parameters[3]),std::stoi(parameters[4]),
+                std::stof(parameters[0]), std::stof(parameters[1]), std::stof(parameters[2]),
+                std::stoi(parameters[3]), std::stoi(parameters[4]),
                 texture_pool.get_texture(MediaPath { parameters[5] }, NUM_AIRCRAFT_TILES)));
         }
     }

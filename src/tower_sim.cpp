@@ -7,10 +7,10 @@
 #include "img/image.hpp"
 #include "img/media_path.hpp"
 
-#include <memory>
 #include <cassert>
 #include <cstdlib>
 #include <ctime>
+#include <memory>
 
 using namespace std::string_literals;
 
@@ -64,8 +64,9 @@ void TowerSimulation::display_help() const
 
 void TowerSimulation::init_airport()
 {
-    airport = std::make_unique<Airport>( one_lane_airport, Point3D { 0, 0, 0 },
-                            texture_pool.get_texture(one_lane_airport_sprite_path, 1), aircraft_manager );
+    airport = std::make_unique<Airport>(one_lane_airport, Point3D { 0, 0, 0 },
+                                        texture_pool.get_texture(one_lane_airport_sprite_path, 1),
+                                        aircraft_manager);
 
     GL::Displayable::display_queue.emplace_back(airport.get());
     GL::move_queue.emplace(airport.get());
@@ -82,7 +83,8 @@ void TowerSimulation::launch(const MediaPath& path)
 
     init_airport();
     assert(airport);
-    aircraft_factory = std::make_unique<AircraftFactory>(aircraft_manager, *airport.get(), path, texture_pool);
+    aircraft_factory =
+        std::make_unique<AircraftFactory>(aircraft_manager, *airport.get(), path, texture_pool);
 
     GL::loop();
 }

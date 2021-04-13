@@ -1,8 +1,9 @@
 #pragma once
 
-#include "aircraft_manager.hpp"
 #include "aircraft_factory.hpp"
+#include "aircraft_manager.hpp"
 #include "texture_pool.hpp"
+
 #include <memory>
 
 class Airport;
@@ -11,7 +12,7 @@ struct AircraftType;
 class TowerSimulation
 {
 private:
-    bool help        = false;
+    bool help = false;
     std::unique_ptr<Airport> airport;
     AircraftManager aircraft_manager;
     std::unique_ptr<AircraftFactory> aircraft_factory;

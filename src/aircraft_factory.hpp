@@ -12,7 +12,7 @@
 class AircraftFactory
 {
 private:
-    static const int airlines_size                   = 8;
+    static constexpr int airlines_size        = 8;
     const std::string airlines[airlines_size] = { "AF", "LH", "EY", "DL", "KL", "BA", "AY", "EY" };
     AircraftManager& aircraft_manager;
     Airport& airport;
@@ -23,9 +23,9 @@ private:
     std::vector<std::unique_ptr<const AircraftType>> load_types(const MediaPath&, TexturePool&);
 
 public:
-    AircraftFactory(AircraftManager&, Airport&, const MediaPath& path,TexturePool& texture_pool);
-    
+    AircraftFactory(AircraftManager&, Airport&, const MediaPath& path, TexturePool& texture_pool);
+
     void create_random_aircraft();
-    
+
     void print_aircrafts_on_airline(int x);
 };

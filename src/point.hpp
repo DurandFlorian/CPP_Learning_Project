@@ -7,7 +7,8 @@
 #include <numeric>
 #include <string>
 
-template <unsigned char dimension, typename T, std::enable_if_t<std::is_arithmetic_v<T>,bool > = true> class Point
+template <unsigned char dimension, typename T, std::enable_if_t<std::is_arithmetic_v<T>, bool> = true>
+class Point
 {
 public:
     T& x()
@@ -46,7 +47,7 @@ public:
     Point() {};
 
     template <typename... Arg>
-    Point(T v, Arg&&... init) : values { v,static_cast<T>(std::forward<Arg>(init))... }
+    Point(T v, Arg&&... init) : values { v, static_cast<T>(std::forward<Arg>(init))... }
     {
         static_assert(sizeof...(init) <= dimension);
     }
@@ -151,9 +152,10 @@ public:
     {
         std::string coordinates = "coordinates{ ";
         return std::transform_reduce(
-            values.begin(), values.end(), coordinates,
-            [](std::string s1, std::string s2) { return s1 + s2 + " "; },
-            [](T v) { return std::to_string(v); }) + "}";
+                   values.begin(), values.end(), coordinates,
+                   [](std::string s1, std::string s2) { return s1 + s2 + " "; },
+                   [](T v) { return std::to_string(v); }) +
+               "}";
     }
 
     static void test_generic_points()
@@ -165,7 +167,6 @@ public:
         p1 += p2;
         p1 *= 3;
     }
-
 
     std::array<T, dimension> values;
 };

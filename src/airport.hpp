@@ -68,22 +68,23 @@ public:
         aircraftManager { aircraft_manager }
     {}
 
-
-    Tower& get_tower()
-      { return tower; } 
-
+    Tower& get_tower() { return tower; }
 
     void display() const override { texture.draw(project_2D(pos), { 2.0f, 2.0f }); }
-
 
     void move(int64_t dt) override
     {
         assert(dt > -1);
+        update_refill_time();
         for (auto& t : terminals)
         {
             t.refill_aircraft_if_needed(fuel_stock);
             t.move(dt);
         }
+    }
+
+    void update_refill_time()
+    {
         if (next_refill_time == 0)
         {
             fuel_stock += ordered_fuel;

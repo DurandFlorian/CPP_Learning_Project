@@ -16,7 +16,7 @@ public:
 
 private:
     static const std::string build_error_msg(const std::string_view& flight_number, const Point3D& pos,
-                                       const Point3D& speed,const std::string_view& reason)
+                                             const Point3D& speed, const std::string_view& reason)
     {
         std::string str;
         str += flight_number;

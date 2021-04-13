@@ -154,12 +154,12 @@ void Aircraft::move(int64_t dt)
     }
 }
 
-void Aircraft::crash(const std::string_view& reason){
+void Aircraft::crash(const std::string_view& reason)
+{
     control.unbook_terminal(*this);
     dead = true;
-    throw AircraftCrash { flight_number, pos, speed, reason};
+    throw AircraftCrash { flight_number, pos, speed, reason };
 }
-
 
 void Aircraft::display() const
 {
@@ -228,6 +228,5 @@ void Aircraft::refill(int& fuel_stock)
 void Aircraft::print_refilled_fuel(int refilled_fuel)
 {
     std::cout << flight_number << " has been refilled with " << refilled_fuel << " of fuel stock"
-                  << std::endl;
+              << std::endl;
 }
-
