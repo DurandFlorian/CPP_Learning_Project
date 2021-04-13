@@ -16,7 +16,7 @@ struct AircraftType
     const GL::Texture2D& texture;
 
     AircraftType(const float max_ground_speed_, const float max_air_speed_, const float max_accel_,
-                 int max_fuel_, const int consumed_fuel_, const GL::Texture2D& sprite) :
+                 const int max_fuel_, const int consumed_fuel_, const GL::Texture2D& sprite) :
         max_ground_speed { max_ground_speed_ },
         max_air_speed { max_air_speed_ },
         max_accel { max_accel_ },

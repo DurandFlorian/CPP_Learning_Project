@@ -3,16 +3,15 @@
 #include <fstream>
 #include <iostream>
 
-AircraftFactory::AircraftFactory(AircraftManager& aircraft_manager, Airport* airport, const MediaPath& path,
-                                 TexturePool& texture_pool) :
-    _aircraft_manager { aircraft_manager },
-    _airport { airport },
-    aircraft_types { loadTypes(path, texture_pool) }
+AircraftFactory::AircraftFactory(AircraftManager& aircraft_manager_,Airport& airport_, const MediaPath& path,
+                                  TexturePool& texture_pool) :
+    aircraft_manager { aircraft_manager_ },
+    airport { airport_ },
+    aircraft_types { load_types(path, texture_pool) }
 {}
 
 void AircraftFactory::create_aircraft(const AircraftType& type)
 {
-    assert(_airport);
     std::string flight_number = airlines[std::rand() % 8] + std::to_string(1000 + (rand() % 9000));
     while (aircraft_numbers.find(flight_number) != aircraft_numbers.end())
     {
@@ -22,23 +21,22 @@ void AircraftFactory::create_aircraft(const AircraftType& type)
     const float angle       = (rand() % 1000) * 2 * 3.141592f / 1000.f; // random angle between 0 and 2pi
     const Point3D start     = Point3D { std::sin(angle), std::cos(angle), 0 } * 3 + Point3D { 0, 0, 2 };
     const Point3D direction = (-start).normalize();
-    _aircraft_manager.add_aircraft(
-        std::make_unique<Aircraft>(type, flight_number, start, direction, _airport->get_tower()));
+    aircraft_manager.add_aircraft(
+        std::make_unique<Aircraft>(type, flight_number, start, direction, airport.get_tower()));
 }
 
 void AircraftFactory::create_random_aircraft()
 {
-    assert(_airport);
     create_aircraft(*(aircraft_types[rand() % aircraft_types.size()]));
 }
 
-std::vector<std::unique_ptr<AircraftType>> AircraftFactory::loadTypes(const MediaPath& path,
+std::vector<std::unique_ptr<const AircraftType>> AircraftFactory::load_types(const MediaPath& path,
                                                                       TexturePool& texture_pool)
 {
-    std::vector<std::unique_ptr<AircraftType>> types;
+    std::vector<std::unique_ptr<const AircraftType>> types;
     std::string line;
     std::ifstream file { path.get_full_path() };
-    std::string parameters[6];
+    std::array<std::string,6> parameters;
     if (file.is_open())
     {
         while (getline(file, line))
@@ -62,5 +60,5 @@ std::vector<std::unique_ptr<AircraftType>> AircraftFactory::loadTypes(const Medi
 void AircraftFactory::print_aircrafts_on_airline(int x)
 {
     assert(x < airlines_size);
-    std::cout << airlines[x] << " : " << _aircraft_manager.aircrafts_on_airline(airlines[x]) << std::endl;
+    std::cout << airlines[x] << " : " << aircraft_manager.aircrafts_on_airline(airlines[x]) << std::endl;
 }

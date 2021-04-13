@@ -46,7 +46,7 @@ public:
     }
 
     // progress service
-    void move(int64_t dt) override
+    void move(const int64_t dt) override
     {
         assert(dt > -1);
         if (in_use() && is_servicing() && !current_aircraft->is_low_on_fuel())

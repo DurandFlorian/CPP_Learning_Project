@@ -68,13 +68,14 @@ public:
         aircraftManager { aircraft_manager }
     {}
 
-    // return the airport
-    Tower& get_tower() { return tower; }
 
-    // display the airport
+    Tower& get_tower()
+      { return tower; } 
+
+
     void display() const override { texture.draw(project_2D(pos), { 2.0f, 2.0f }); }
 
-    // move aircraft at terminals
+
     void move(int64_t dt) override
     {
         assert(dt > -1);
@@ -87,7 +88,7 @@ public:
         {
             fuel_stock += ordered_fuel;
             auto full_received = ordered_fuel;
-            ordered_fuel       = std::min(aircraftManager.get_required_fuel(), 5000); //TODO : modifier
+            ordered_fuel       = std::min(aircraftManager.get_required_fuel(), 5000);
             next_refill_time   = 100;
             std::cout << "Airport refill -> fuel received : " << full_received
                       << " | fuel stock : " << fuel_stock << " | fuel ordered : " << ordered_fuel

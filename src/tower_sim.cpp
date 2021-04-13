@@ -7,6 +7,7 @@
 #include "img/image.hpp"
 #include "img/media_path.hpp"
 
+#include <memory>
 #include <cassert>
 #include <cstdlib>
 #include <ctime>
@@ -20,13 +21,8 @@ TowerSimulation::TowerSimulation(int argc, char** argv) :
     MediaPath::initialize(argv[0]);
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
     GL::init_gl(argc, argv, "Airport Tower Simulation");
-    GL::move_queue.emplace(&_aircraft_manager);
+    GL::move_queue.emplace(&aircraft_manager);
     create_keystrokes();
-}
-
-TowerSimulation::~TowerSimulation()
-{
-    delete airport;
 }
 
 void TowerSimulation::create_keystrokes()
@@ -36,20 +32,20 @@ void TowerSimulation::create_keystrokes()
     GL::keystrokes.emplace('c',
                            [this]()
                            {
-                               assert(_aircraft_factory);
-                               _aircraft_factory.get()->create_random_aircraft();
+                               assert(aircraft_factory);
+                               aircraft_factory.get()->create_random_aircraft();
                            });
     GL::keystrokes.emplace('+', []() { GL::change_zoom(0.95f); });
     GL::keystrokes.emplace('-', []() { GL::change_zoom(1.05f); });
     GL::keystrokes.emplace('f', []() { GL::toggle_fullscreen(); });
     GL::keystrokes.emplace('m', []() { GL::up_frame_rate(); });
     GL::keystrokes.emplace('l', []() { GL::down_frame_rate(); });
-    GL::keystrokes.emplace('a', [this]() { _aircraft_manager.print_crashed_aircrafts(); });
+    GL::keystrokes.emplace('a', [this]() { aircraft_manager.print_crashed_aircrafts(); });
     GL::keystrokes.emplace('p', []() { GL::pause(); });
     for (int x = 0; x < 8; x++)
     {
         GL::keystrokes.emplace('0' + x,
-                               [this, x]() { _aircraft_factory.get()->print_aircrafts_on_airline(x); });
+                               [this, x]() { aircraft_factory.get()->print_aircrafts_on_airline(x); });
     }
 }
 
@@ -68,11 +64,11 @@ void TowerSimulation::display_help() const
 
 void TowerSimulation::init_airport()
 {
-    airport = new Airport { one_lane_airport, Point3D { 0, 0, 0 },
-                            texture_pool.get_texture(one_lane_airport_sprite_path, 1), _aircraft_manager };
+    airport = std::make_unique<Airport>( one_lane_airport, Point3D { 0, 0, 0 },
+                            texture_pool.get_texture(one_lane_airport_sprite_path, 1), aircraft_manager );
 
-    GL::Displayable::display_queue.emplace_back(airport);
-    GL::move_queue.emplace(airport);
+    GL::Displayable::display_queue.emplace_back(airport.get());
+    GL::move_queue.emplace(airport.get());
 }
 
 void TowerSimulation::launch(const MediaPath& path)
@@ -86,7 +82,7 @@ void TowerSimulation::launch(const MediaPath& path)
 
     init_airport();
     assert(airport);
-    _aircraft_factory = std::make_unique<AircraftFactory>(_aircraft_manager, airport, path, texture_pool);
+    aircraft_factory = std::make_unique<AircraftFactory>(aircraft_manager, *airport.get(), path, texture_pool);
 
     GL::loop();
 }

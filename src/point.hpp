@@ -10,34 +10,34 @@
 template <unsigned char dimension, typename T, std::enable_if_t<std::is_arithmetic_v<T>,bool > = true> class Point
 {
 public:
-    float& x()
+    T& x()
     {
         static_assert(dimension >= 1);
         return values[0];
     }
-    float x() const
+    T x() const
     {
         static_assert(dimension >= 1);
         return values[0];
     }
 
-    float& y()
+    T& y()
     {
         static_assert(dimension >= 2);
         return values[1];
     }
-    float y() const
+    T y() const
     {
         static_assert(dimension >= 2);
         return values[1];
     }
 
-    float& z()
+    T& z()
     {
         static_assert(dimension >= 3);
         return values[2];
     }
-    float z() const
+    T z() const
     {
         static_assert(dimension >= 3);
         return values[2];
@@ -54,21 +54,21 @@ public:
     Point& operator+=(const Point& other)
     {
         std::transform(values.begin(), values.end(), other.values.begin(), values.begin(),
-                       [](const float& a, const float& b) { return a + b; });
+                       [](const T& a, const T& b) { return a + b; });
         return *this;
     }
 
     Point& operator-=(const Point& other)
     {
         std::transform(values.begin(), values.end(), other.values.begin(), values.begin(),
-                       [](const float& a, const float& b) { return a - b; });
+                       [](const T& a, const T& b) { return a - b; });
         return *this;
     }
 
     Point& operator*=(const Point& other)
     {
         std::transform(values.begin(), values.end(), other.values.begin(), values.begin(),
-                       [](const float& a, const float& b) { return a * b; });
+                       [](const T& a, const T& b) { return a * b; });
         return *this;
     }
 
@@ -149,11 +149,11 @@ public:
 
     std::string print_coordinates() const
     {
-        std::string coordinates = "coordinates{";
+        std::string coordinates = "coordinates{ ";
         return std::transform_reduce(
             values.begin(), values.end(), coordinates,
-            [](std::string s1, std::string s2) { return s1 + ", " + s2; },
-            [](T v) { return std::to_string(v); });
+            [](std::string s1, std::string s2) { return s1 + s2 + " "; },
+            [](T v) { return std::to_string(v); }) + "}";
     }
 
     static void test_generic_points()
@@ -165,6 +165,7 @@ public:
         p1 += p2;
         p1 *= 3;
     }
+
 
     std::array<T, dimension> values;
 };

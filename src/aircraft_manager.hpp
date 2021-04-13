@@ -11,9 +11,9 @@ class AircraftManager : public GL::DynamicObject
 public:
     void add_aircraft(std::unique_ptr<Aircraft> aircraft);
 
-    void move(int64_t dt) override;
+    void move(const int64_t dt) override;
 
-    int aircrafts_on_airline(const std::string& line);
+    int aircrafts_on_airline(const std::string_view line);
 
     int get_required_fuel() const;
 
@@ -21,5 +21,5 @@ public:
 
 private:
     std::vector<std::unique_ptr<Aircraft>> aircrafts;
-    int crashed_aircrafts = 0;
+    unsigned int crashed_aircrafts = 0;
 };

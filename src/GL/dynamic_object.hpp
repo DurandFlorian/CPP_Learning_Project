@@ -7,18 +7,18 @@ namespace GL {
 class DynamicObject
 {
 protected :
-    bool _dead = false;
+    bool dead = false;
 
 public:
     DynamicObject() { }
 
     virtual ~DynamicObject() { }
 
-    virtual void move(int64_t dt) = 0;
+    virtual void move(const int64_t dt) = 0;
 
-    bool is_dead() 
+    bool is_dead() const
     {
-        return _dead;
+        return dead;
     }
 };
 

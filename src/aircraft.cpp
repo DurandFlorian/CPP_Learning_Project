@@ -64,7 +64,7 @@ void Aircraft::operate_landing_gear()
         if (ground_before && !ground_after)
         {
             std::cout << flight_number << " lift off" << std::endl;
-            _dead = true;
+            dead = true;
         }
         else if (!ground_before && ground_after)
         {
@@ -95,7 +95,10 @@ void Aircraft::move(int64_t dt)
     assert(dt > -1);
     if (waypoints.empty())
     {
-        waypoints = control.reserve_terminal(*this);
+        for (const auto& wp : control.reserve_terminal(*this))
+        {
+            add_waypoint<false>(wp);
+        }
     }
     if (waypoints.empty())
     {
@@ -128,9 +131,7 @@ void Aircraft::move(int64_t dt)
         {
             if (!landing_gear_deployed)
             {
-                using namespace std::string_literals;
-                _dead = true;
-                throw AircraftCrash { flight_number, pos, speed, "bad landing" };
+                crash("bad landing");
             }
         }
         else
@@ -138,9 +139,7 @@ void Aircraft::move(int64_t dt)
             fuel -= type.consumed_fuel;
             if (fuel <= 0)
             {
-                control.unbook_terminal(*this);
-                _dead = true;
-                throw AircraftCrash { flight_number, pos, speed, "out of fuel" };
+                crash("out of fuel");
             }
             // if we are in the air, but too slow, then we will sink!
             const float speed_len = speed.length();
@@ -155,6 +154,13 @@ void Aircraft::move(int64_t dt)
     }
 }
 
+void Aircraft::crash(const std::string_view& reason){
+    control.unbook_terminal(*this);
+    dead = true;
+    throw AircraftCrash { flight_number, pos, speed, reason};
+}
+
+
 void Aircraft::display() const
 {
     type.texture.draw(project_2D(pos), { PLANE_TEXTURE_DIM, PLANE_TEXTURE_DIM }, get_speed_octant());
@@ -162,7 +168,7 @@ void Aircraft::display() const
 
 bool Aircraft::is_dead() const
 {
-    return _dead;
+    return dead;
 }
 
 bool Aircraft::is_circling() const
@@ -192,7 +198,7 @@ int Aircraft::get_required_fuel() const
 {
     if (is_low_on_fuel() && landing_gear_deployed)
     {
-        return 3000 - fuel;
+        return type.max_fuel - fuel;
     }
     return 0;
 }
@@ -209,14 +215,19 @@ void Aircraft::refill(int& fuel_stock)
     if (fuel_stock < 0)
     {
         fuel += required_fuel + fuel_stock;
-        std::cout << flight_number << " has been refilled with " << required_fuel + fuel_stock
-                  << " of fuel stock" << std::endl;
+        print_refilled_fuel(required_fuel + fuel_stock);
         fuel_stock = 0;
     }
     else
     {
         fuel += required_fuel;
-        std::cout << flight_number << " has been refilled with " << required_fuel << " of fuel stock"
-                  << std::endl;
+        print_refilled_fuel(required_fuel);
     }
 }
+
+void Aircraft::print_refilled_fuel(int refilled_fuel)
+{
+    std::cout << flight_number << " has been refilled with " << refilled_fuel << " of fuel stock"
+                  << std::endl;
+}
+

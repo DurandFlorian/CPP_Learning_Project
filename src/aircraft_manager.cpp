@@ -10,14 +10,13 @@ void AircraftManager::add_aircraft(std::unique_ptr<Aircraft> aircraft)
     aircrafts.emplace_back(std::move(aircraft));
 }
 
-void AircraftManager::move(int64_t dt)
+void AircraftManager::move(const int64_t dt)
 {
     assert(dt > -1);
     std::sort(aircrafts.begin(), aircrafts.end(),
               [](const auto& a1, const auto& a2) { return a1.get() < a2.get(); });
     aircrafts.erase(std::remove_if(aircrafts.begin(), aircrafts.end(),
-                                   [dt, this](const auto& aircraft)
-                                   {
+                                   [dt, this](const auto& aircraft) {
                                        try
                                        {
                                            aircraft.get()->move(dt);
@@ -32,12 +31,13 @@ void AircraftManager::move(int64_t dt)
                     aircrafts.end());
 }
 
-int AircraftManager::aircrafts_on_airline(const std::string& line)
+int AircraftManager::aircrafts_on_airline(const std::string_view line)
 {
     assert(!line.empty());
     return std::count_if(aircrafts.begin(), aircrafts.end(),
-                         [line](const std::unique_ptr<Aircraft>& aircraft)
-                         { return aircraft.get()->get_flight_num().substr(0, 2) == line; });
+                         [line](const std::unique_ptr<Aircraft>& aircraft) {
+                             return aircraft.get()->get_flight_num().substr(0, 2) == line;
+                         });
 }
 
 int AircraftManager::get_required_fuel() const

@@ -21,7 +21,7 @@ private:
     Tower& control;
     bool landing_gear_deployed = false; // is the landing gear deployed?
     bool is_at_terminal        = false;
-    bool _dead                 = false;
+    bool dead                 = false;
     int fuel                   = std::experimental::randint(150, type.max_fuel);
 
     // turn the aircraft to arrive at the next waypoint
@@ -43,6 +43,7 @@ private:
     template<bool front>
     void add_waypoint(const Waypoint& wp);
     bool is_on_ground() const { return pos.z() < DISTANCE_THRESHOLD; }
+    void crash(const std::string_view&);
     float max_speed() const { return is_on_ground() ? type.max_ground_speed : type.max_air_speed; }
 
     Aircraft(const Aircraft&) = delete;
@@ -64,13 +65,13 @@ public:
 
     ~Aircraft() {}
 
-    // returns the aircraft number
+    
     const std::string& get_flight_num() const { return flight_number; }
-    // distance from aircraft to a point
+    
     float distance_to(const Point3D& p) const { return pos.distance_to(p); }
-    // display the aircraft
+   
     void display() const override;
-    // move base on instructions
+    
     void move(int64_t dt);
 
     bool is_dead() const;
@@ -84,6 +85,8 @@ public:
     int get_required_fuel() const;
 
     void refill(int& fuel_stock);
+
+    void print_refilled_fuel(int refilled_fuel);
 
     friend bool operator<(const Aircraft& a1, const Aircraft& a2) { return a1.fuel < a2.fuel; }
 

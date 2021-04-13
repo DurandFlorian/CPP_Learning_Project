@@ -12,9 +12,9 @@ class TowerSimulation
 {
 private:
     bool help        = false;
-    Airport* airport = nullptr;
-    AircraftManager _aircraft_manager;
-    std::unique_ptr<AircraftFactory> _aircraft_factory;
+    std::unique_ptr<Airport> airport;
+    AircraftManager aircraft_manager;
+    std::unique_ptr<AircraftFactory> aircraft_factory;
     TexturePool texture_pool;
 
     TowerSimulation(const TowerSimulation&) = delete;
@@ -27,7 +27,6 @@ private:
 
 public:
     TowerSimulation(int argc, char** argv);
-    ~TowerSimulation();
 
     void launch(const MediaPath& path);
 };
