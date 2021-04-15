@@ -127,6 +127,7 @@ void down_speed()
 void pause()
 {
     paused = !paused;
+    previous_time = std::chrono::system_clock::now();
 }
 
 void init_gl(int argc, char** argv, const char* title)
