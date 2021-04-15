@@ -83,7 +83,7 @@ void timer(const int step)
         for (auto it = move_queue.begin(); it != move_queue.end();)
         {
             GL::DynamicObject* dynamic_obj = *it;
-            dynamic_obj->move(dt);
+            dynamic_obj->move(dt / speed);
             if (dynamic_obj->is_dead())
             {
                 it = move_queue.erase(it);
@@ -109,6 +109,19 @@ void down_frame_rate()
     {
         ticks_per_sec--;
     }
+}
+
+void up_speed()
+{
+    if (speed > 4.)
+    {
+        speed -= 5.;
+    }
+}
+
+void down_speed()
+{
+    speed += 5.;
 }
 
 void pause()

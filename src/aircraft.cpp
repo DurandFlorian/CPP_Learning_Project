@@ -90,9 +90,9 @@ template <bool front> void Aircraft::add_waypoint(const Waypoint& wp)
     }
 }
 
-void Aircraft::move(int64_t dt)
+void Aircraft::move(const float dt)
 {
-    assert(dt > -1);
+    assert(dt > 0.);
     if (waypoints.empty())
     {
         for (const auto& wp : control.reserve_terminal(*this))
@@ -111,7 +111,7 @@ void Aircraft::move(int64_t dt)
     {
         turn_to_waypoint();
         // move in the direction of the current speed
-        pos += speed * (dt / 100.);
+        pos += speed * dt;
 
         // if we are close to our next waypoint, stike if off the list
         if (!waypoints.empty() && distance_to(waypoints.front()) < DISTANCE_THRESHOLD)

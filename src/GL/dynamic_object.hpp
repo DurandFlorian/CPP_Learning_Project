@@ -6,20 +6,17 @@ namespace GL {
 
 class DynamicObject
 {
-protected :
+protected:
     bool dead = false;
 
 public:
-    DynamicObject() { }
+    DynamicObject() {}
 
-    virtual ~DynamicObject() { }
+    virtual ~DynamicObject() {}
 
-    virtual void move(const int64_t dt) = 0;
+    virtual void move(const float dt) = 0;
 
-    bool is_dead() const
-    {
-        return dead;
-    }
+    bool is_dead() const { return dead; }
 };
 
 inline std::unordered_set<DynamicObject*> move_queue;

@@ -10,9 +10,9 @@ void AircraftManager::add_aircraft(std::unique_ptr<Aircraft> aircraft)
     aircrafts.emplace_back(std::move(aircraft));
 }
 
-void AircraftManager::move(const int64_t dt)
+void AircraftManager::move(const float dt)
 {
-    assert(dt > -1);
+    assert(dt > 0.);
     std::sort(aircrafts.begin(), aircrafts.end(),
               [](const auto& a1, const auto& a2) { return a1.get() < a2.get(); });
     aircrafts.erase(std::remove_if(aircrafts.begin(), aircrafts.end(),

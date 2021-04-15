@@ -72,9 +72,9 @@ public:
 
     void display() const override { texture.draw(project_2D(pos), { 2.0f, 2.0f }); }
 
-    void move(int64_t dt) override
+    void move(const float dt) override
     {
-        assert(dt > -1);
+        assert(dt > 0.);
         update_refill_time();
         for (auto& t : terminals)
         {

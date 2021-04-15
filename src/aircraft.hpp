@@ -70,7 +70,7 @@ public:
 
     void display() const override;
 
-    void move(int64_t dt);
+    void move(const float dt);
 
     bool is_dead() const;
 

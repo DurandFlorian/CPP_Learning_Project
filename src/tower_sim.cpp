@@ -38,8 +38,10 @@ void TowerSimulation::create_keystrokes()
     GL::keystrokes.emplace('+', []() { GL::change_zoom(0.95f); });
     GL::keystrokes.emplace('-', []() { GL::change_zoom(1.05f); });
     GL::keystrokes.emplace('f', []() { GL::toggle_fullscreen(); });
-    GL::keystrokes.emplace('m', []() { GL::up_frame_rate(); });
-    GL::keystrokes.emplace('l', []() { GL::down_frame_rate(); });
+    GL::keystrokes.emplace('u', []() { GL::up_frame_rate(); });
+    GL::keystrokes.emplace('d', []() { GL::down_frame_rate(); });
+    GL::keystrokes.emplace('m', []() { GL::up_speed(); });
+    GL::keystrokes.emplace('l', []() { GL::down_speed(); });
     GL::keystrokes.emplace('a', [this]() { aircraft_manager.print_crashed_aircrafts(); });
     GL::keystrokes.emplace('p', []() { GL::pause(); });
     for (int x = 0; x < 8; x++)
